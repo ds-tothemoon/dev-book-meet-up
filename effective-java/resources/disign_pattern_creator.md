@@ -72,10 +72,10 @@ design.creator.Wifi@1b6d3586
 
 
 ### 싱글턴 패턴과 thread-safe
-1. 고전적인 싱글턴 패턴
+#### 1. 고전적인 싱글턴 패턴
 - 위에 Wifi 클래스에서 보듯이, 없으면 생성 있으면 반환
 
-2. 동기화 블럭 사용 (Lazy Initialization with synchronized)
+#### 2. 동기화 블럭 사용 (Lazy Initialization with synchronized)
 - `synchronized` 키워드를 이용한 방식
 - `게으른 초기화 방식` 이란 컴파일 시점에 인스턴스를 생성하는 것이 아니라 인스턴스가 필요한 시점에 요청하여 동적 바인딩을 통해 인스턴스를 생성하는 방식
 - thread-safe한 방법이지만, 인스턴스가 생성이 되었든 안되었든 무조건 동기화 블록을 거치게 되어 requestWifi 메소드 호출 시 락을 획득하고 해제한느 오버헤드가 발생하여 성능 저하가 발생할 수 있다.
@@ -95,7 +95,7 @@ public class Wifi {
 }
 ```
 
-3. Lazy Initialization. Double Checking Locking (DCL)
+#### 3. Lazy Initialization. Double Checking Locking (DCL)
 - 두 번째 방법의 문제를 해결하기 위한 방법 (Lazy Initialization + DCL)
 	1. 변수가 초기화되었는지 확인한다. (no Lock) 초기화되면 즉시 반환한다.
 	2. 변수가 초기화되지 않았다면 Lock을 얻는다.
@@ -147,11 +147,11 @@ public class Wifi {
 }
 ```
 
-4. volatile을 이용한 개선된 DCL Singleton 패턴 (jdk 1.5 이상)
+#### 4. volatile을 이용한 개선된 DCL Singleton 패턴 (jdk 1.5 이상)
 - 세번째 방법에서 공유 변수에 volatile 키워드를 이용함으로써 CPU 캐시에서 변수를 참조하지 않고 메인 메모리에서 변수를 참조하게 함으로써 컴파일러의 재배치(reordering) 문제를 야기하지 않는다.
 - 또한, localRef를 사용한 이유는 공유 변수인 wifi가 이미 초기화된 경우, 공유 변수인 wifi, volatile 필드가 한 번만 액세스 된다는 장점이 있다. 이후에는 계속 localRef 지역변수만 검사하게 된다. (성능 개선)
 
-5. LazyHolder Singleton 패턴
+#### 5. LazyHolder Singleton 패턴
 - requestWifi 메서드에서 Static Nested Class를 처음 호출하여 로딩할 때까지 초기화를 미루기 때문에 volatile이나 synchronized 키워드 없이도 동시성 문제를 해결하며 성능도 뛰어나다.
 
 ```
@@ -268,21 +268,6 @@ while (true) {
 
 - 실제 복제본인지 검증
 ```
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
 Monster monsterA = new Monster(new Location(5, 5), 100);    // 프로토타입 A
 Monster monsterB = new Monster(new Location(0, 0), 10);     // 프로토타입 B
 Monster monsterC = new Monster(new Location(-3, 3), 50);    // 프로토타입 C
